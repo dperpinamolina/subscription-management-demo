@@ -1,9 +1,9 @@
 <form [formGroup]="form" autocomplete="off" (ngSubmit)="onAddButtonClicked()">
   <div>
-    <igx-combo [data]="fqsns" formControlName="windfarms">
+    <igx-combo [data]="windfarms" formControlName="windfarms">
       <label [for]="'windfarms'" class="comboLabel" igxLabel> Windfarms </label>
     </igx-combo>
-    <igx-combo [data]="assets" formControlName="devices">
+    <igx-combo [data]="devices" formControlName="devices">
       <label [for]="'devices'" class="comboLabel" igxLabel> Devices </label>
     </igx-combo>
     <igx-select formControlName="resolution">

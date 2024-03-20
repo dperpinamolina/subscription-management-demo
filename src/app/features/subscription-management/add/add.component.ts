@@ -7,11 +7,7 @@ import {
   IGX_SELECT_DIRECTIVES,
   IgxDateTimeEditorModule,
 } from 'igniteui-angular';
-import {
-  Subscription,
-  definedFQSN,
-  definedSignals,
-} from '../subscription-management.component';
+import { Subscription, definedDevices, definedResolutions, definedSignals, definedWindfarms } from '../subscription-management.model';
 
 type FormRawValue = {
   windfarms: Array<string>;
@@ -43,9 +39,10 @@ export class AddComponent {
   @Output()
   cancelButtonClicked = new EventEmitter();
 
+  windfarms = [...definedWindfarms];
   signals = [...definedSignals];
-  fqsns = [...definedFQSN];
-  assets = ['asset1', 'asset2', 'asset3', 'asset4'];
+  devices = [...definedDevices];
+  resolutions = [...definedResolutions];
 
   form = inject(FormBuilder).nonNullable.group({
     windfarms: [[], Validators.required],

@@ -1,37 +1,25 @@
-import { NgForOf, NgIf } from '@angular/common';
 import { Component, ViewChild, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import dayjs from 'dayjs';
 import {
   IGX_ACTION_STRIP_DIRECTIVES,
+  IGX_COMBO_DIRECTIVES,
   IGX_DATE_RANGE_PICKER_DIRECTIVES,
   IGX_DIALOG_DIRECTIVES,
   IGX_GRID_DIRECTIVES,
-  IGX_INPUT_GROUP_DIRECTIVES,
-  IGX_SELECT_DIRECTIVES,
   IgxButtonDirective,
   IgxDialogComponent,
   IgxIconComponent,
 } from 'igniteui-angular';
 import { AddComponent } from './add/add.component';
-
-export const definedSignals = [
-  'Wind speed low start condition',
-  'Yaw wind speed low yaw enable',
-  'WTG system ok',
-  'Pit ALU container level L warn',
-];
-
-export const definedFQSN = ['ES-123874', 'IT-872349', 'EN-123830', 'AU-123822'];
-
-export type Subscription = {
-  windfarms: string;
-  devices: string;
-  resolution: string;
-  signals: string;
-  from: string;
-  to: string;
-};
+import {
+  Subscription,
+  definedDevices,
+  definedResolutions,
+  definedSignals,
+  definedSubscriptions,
+  definedWindfarms,
+} from './subscription-management.model';
 
 @Component({
   selector: 'app-subscription-management',
@@ -41,12 +29,9 @@ export type Subscription = {
     IgxButtonDirective,
     IgxIconComponent,
     IGX_ACTION_STRIP_DIRECTIVES,
-    IGX_INPUT_GROUP_DIRECTIVES,
-    IGX_SELECT_DIRECTIVES,
+    IGX_COMBO_DIRECTIVES,
     IGX_DIALOG_DIRECTIVES,
     IGX_DATE_RANGE_PICKER_DIRECTIVES,
-    NgIf,
-    NgForOf,
     ReactiveFormsModule,
     AddComponent,
   ],
@@ -57,53 +42,28 @@ export class SubscriptionManagementComponent {
   @ViewChild('addDialog', { read: IgxDialogComponent, static: true })
   addDialog!: IgxDialogComponent;
 
+  windfarms = [...definedWindfarms];
   signals = [...definedSignals];
+  devices = [...definedDevices];
+  resolutions = [...definedResolutions];
+  readonly subscriptions: Array<Subscription> = [...definedSubscriptions];
 
   filtersForm = inject(FormBuilder).nonNullable.group({
-    fqsn: [''],
-    signals: [''],
+    windfarms: [[]],
+    devices: [[]],
+    resolution: [[]],
+    signals: [[]],
     fromTo: [{ start: new Date(2024, 2, 10), end: new Date(2024, 2, 25) }],
   });
 
-  readonly subscriptions: Array<Subscription> = [
-    {
-      windfarms: 'ES-1239809',
-      signals: this.signals[0],
-      from: '11/02/2024',
-      to: '15/02/2024',
-      devices: 'asset1',
-      resolution: 'resolution1',
-    },
-    {
-      windfarms: 'ES-6578809',
-      signals: this.signals[1],
-      from: '11/02/2024',
-      to: '17/02/2024',
-      devices: 'asset1',
-      resolution: 'resolution1',
-    },
-    {
-      windfarms: 'RU-1222209',
-      signals: this.signals[2],
-      from: '11/02/2024',
-      to: '29/02/2024',
-      devices: 'asset1',
-      resolution: 'resolution1',
-    },
-    {
-      windfarms: 'EN-1111809',
-      signals: this.signals[3],
-      from: '02/02/2024',
-      to: '20/02/2024',
-      devices: 'asset1',
-      resolution: 'resolution1',
-    },
-  ];
-
   filterSubscriptions = [...this.subscriptions];
 
+  delete(windfarms: string) {
+    this.filterSubscriptions = this.subscriptions.filter((s) => s.windfarms !== windfarms);
+  }
+
   submitFilter() {
-    const { fqsn, signals, fromTo } = this.filtersForm.getRawValue();
+    const { windfarms, signals, fromTo } = this.filtersForm.getRawValue();
 
     const startDate = dayjs(fromTo.start);
     const endDate = dayjs(fromTo.end);
@@ -133,7 +93,7 @@ export class SubscriptionManagementComponent {
       return (
         startDate.isBefore(subscriptionStartDate) &&
         endDate.isAfter(subscriptionEndDate) &&
-        (!fqsn || s.windfarms.includes(fqsn)) &&
+        (!windfarms || s.windfarms.includes(windfarms)) &&
         (!signals || s.signals === signals)
       );
     });
@@ -152,20 +112,3 @@ export class SubscriptionManagementComponent {
     this.addDialog.close();
   }
 }
-
-/**
- *
- * todo combos, seleccion en cascada
- * preview antes de confirmar
- * FQSN -- Assets
- * Windfarms new column priemra columna - device - signals
- * nuevo filtro para windfarm
- *
- * actionstrip -- view y delete
- *
- * parque (combo)
- * device (combo)
- * resolution (select)
- * signals (combo)
- *
- */

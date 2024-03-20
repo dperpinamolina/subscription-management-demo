@@ -1,17 +1,20 @@
 <h3 class="m-3">SUBSCRIPTIONS MANAGEMENT</h3>
 <form [formGroup]="filtersForm" autocomplete="off" (ngSubmit)="submitFilter()">
   <div class="w-full m-3 flex flex-row flex-nowrap justify-between">
-    <igx-input-group>
-      <input igxInput name="fqsn" type="text" formControlName="fqsn" />
-      <label igxLabel for="fqsn">FQSN</label>
-    </igx-input-group>
-    <!-- Combos -->
-    <igx-select formControlName="signals">
-      <label [for]="'signals'" igxLabel>Signals</label>
-      <igx-select-item *ngFor="let item of signals" [value]="item">
-        {{ item }}
-      </igx-select-item>
-    </igx-select>
+    <igx-combo [data]="windfarms" formControlName="windfarms">
+      <label [for]="'windfarms'" class="comboLabel" igxLabel> Windfarms </label>
+    </igx-combo>
+    <igx-combo [data]="devices" formControlName="devices">
+      <label [for]="'devices'" class="comboLabel" igxLabel> Devices </label>
+    </igx-combo>
+    <igx-combo [data]="resolutions" formControlName="resolution">
+      <label [for]="'resolution'" class="comboLabel" igxLabel>
+        Resolution
+      </label>
+    </igx-combo>
+    <igx-combo [data]="signals" formControlName="signals">
+      <label [for]="'signals'" class="comboLabel" igxLabel> Signals </label>
+    </igx-combo>
     <igx-date-range-picker
       formControlName="fromTo"
       inputFormat="dd/MM/yyyy"
@@ -37,16 +40,16 @@
   <igx-column field="signals" header="Signals"></igx-column>
   <igx-column field="from" header="Date From"></igx-column>
   <igx-column field="to" header="Date To"></igx-column>
-  <!-- <igx-action-strip #actionstrip>
-    <button
-      title="Delete"
-      igxIconButton="flat"
-      igxRipple
-      (click)="delete(actionstrip.context.data.name)"
-    >
+  <igx-action-strip #actionstrip>
+    <button title="View" igxIconButton="flat" igxRipple>
+      <!-- (click)="delete(actionstrip.context.data.name)" -->
+      <igx-icon>view</igx-icon>
+    </button>
+    <button title="Delete" igxIconButton="flat" igxRipple>
+      <!-- (click)="delete(actionstrip.context.data.name)" -->
       <igx-icon>delete</igx-icon>
     </button>
-  </igx-action-strip> -->
+  </igx-action-strip>
 </igx-grid>
 <button
   class="add-subscription__button"
