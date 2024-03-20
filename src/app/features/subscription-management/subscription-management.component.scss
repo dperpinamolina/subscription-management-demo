@@ -1,0 +1,18 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  height: 60vh;
+  width: 90vh;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.add-subscription__button {
+  margin-left: auto;
+}
+
+.add-subscription__dialog {
+  width: 50vw;
+}

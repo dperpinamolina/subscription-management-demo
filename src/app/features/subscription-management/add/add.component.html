@@ -1,0 +1,49 @@
+<form [formGroup]="form" autocomplete="off" (ngSubmit)="onAddButtonClicked()">
+  <div>
+    <igx-combo [data]="fqsns" formControlName="windfarms">
+      <label [for]="'windfarms'" class="comboLabel" igxLabel> Windfarms </label>
+    </igx-combo>
+    <igx-combo [data]="assets" formControlName="devices">
+      <label [for]="'devices'" class="comboLabel" igxLabel> Devices </label>
+    </igx-combo>
+    <igx-select formControlName="resolution">
+      <label [for]="'signals'" igxLabel>Resolution</label>
+      <igx-select-item *ngFor="let item of signals" [value]="item">
+        {{ item }}
+      </igx-select-item>
+    </igx-select>
+    <igx-combo [data]="signals" formControlName="signals">
+      <label [for]="'signals'" class="comboLabel" igxLabel> Signals </label>
+    </igx-combo>
+    <igx-input-group>
+      <input
+        name="from"
+        type="text"
+        igxInput
+        igxDateTimeEditor
+        formControlName="from"
+        [igxDateTimeEditor]="'dd/MM/yyyy mm:ss'"
+      />
+      <label [for]="'from'" igxLabel>Date from</label>
+    </igx-input-group>
+    <igx-input-group>
+      <input
+        name="to"
+        type="text"
+        igxInput
+        igxDateTimeEditor
+        formControlName="to"
+        [igxDateTimeEditor]="'dd/MM/yyyy mm:ss'"
+      />
+      <label [for]="'to'" igxLabel>Date to</label>
+    </igx-input-group>
+  </div>
+  <div class="m-3 flex flex-row flex-nowrap justify-between">
+    <button igxButton="contained" (click)="onCancelButtonClicked()">
+      CANCEL
+    </button>
+    <button type="submit" igxButton="contained" [disabled]="form.invalid">
+      ADD
+    </button>
+  </div>
+</form>

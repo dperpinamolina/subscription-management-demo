@@ -1,0 +1,68 @@
+<h3 class="m-3">SUBSCRIPTIONS MANAGEMENT</h3>
+<form [formGroup]="filtersForm" autocomplete="off" (ngSubmit)="submitFilter()">
+  <div class="w-full m-3 flex flex-row flex-nowrap justify-between">
+    <igx-input-group>
+      <input igxInput name="fqsn" type="text" formControlName="fqsn" />
+      <label igxLabel for="fqsn">FQSN</label>
+    </igx-input-group>
+    <!-- Combos -->
+    <igx-select formControlName="signals">
+      <label [for]="'signals'" igxLabel>Signals</label>
+      <igx-select-item *ngFor="let item of signals" [value]="item">
+        {{ item }}
+      </igx-select-item>
+    </igx-select>
+    <igx-date-range-picker
+      formControlName="fromTo"
+      inputFormat="dd/MM/yyyy"
+      displayFormat="dd/MM/yyyy"
+    ></igx-date-range-picker>
+    <button
+      type="submit"
+      igxButton="contained"
+      [disabled]="filtersForm.invalid"
+    >
+      Search
+    </button>
+  </div>
+</form>
+<igx-grid
+  class="m-3 h-96 w-full"
+  [primaryKey]="'name'"
+  [data]="filterSubscriptions"
+>
+  <igx-column field="windfarms" header="Windfarms"></igx-column>
+  <igx-column field="devices" header="Devices"></igx-column>
+  <igx-column field="resolution" header="Resolution"></igx-column>
+  <igx-column field="signals" header="Signals"></igx-column>
+  <igx-column field="from" header="Date From"></igx-column>
+  <igx-column field="to" header="Date To"></igx-column>
+  <!-- <igx-action-strip #actionstrip>
+    <button
+      title="Delete"
+      igxIconButton="flat"
+      igxRipple
+      (click)="delete(actionstrip.context.data.name)"
+    >
+      <igx-icon>delete</igx-icon>
+    </button>
+  </igx-action-strip> -->
+</igx-grid>
+<button
+  class="add-subscription__button"
+  igxButton="raised"
+  (click)="addDialog.open()"
+>
+  Add
+</button>
+<igx-dialog #addDialog [closeOnOutsideSelect]="false">
+  <igx-dialog-title class="add-subscription__dialog">
+    <div class="title-container">
+      <div class="dialog-title">Add subscription</div>
+    </div>
+  </igx-dialog-title>
+  <app-add
+    (addButtonClicked)="onAddSubscriptionClicked($event)"
+    (cancelButtonClicked)="addDialog.close()"
+  ></app-add>
+</igx-dialog>
