@@ -19,7 +19,7 @@
       title="Delete"
       igxIconButton="flat"
       igxRipple
-      (click)="delete(actionstrip.context.data.name)"
+      (click)="delete(actionstrip.context.data.windfarms)"
     >
       <igx-icon>delete</igx-icon>
     </button>
@@ -41,5 +41,6 @@
   <app-add
     (addButtonClicked)="onAddSubscriptionClicked($event)"
     (cancelButtonClicked)="addDialog.close()"
+    (cancelPreviewButtonClicked)="addDialog.open()"
   ></app-add>
 </igx-dialog>

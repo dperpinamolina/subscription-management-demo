@@ -1,13 +1,29 @@
 import { NgForOf } from '@angular/common';
-import { Component, EventEmitter, Output, inject } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Output,
+  ViewChild,
+  inject,
+} from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import dayjs from 'dayjs';
 import {
   IGX_COMBO_DIRECTIVES,
+  IGX_DIALOG_DIRECTIVES,
   IGX_INPUT_GROUP_DIRECTIVES,
   IGX_SELECT_DIRECTIVES,
   IgxDateTimeEditorModule,
+  IgxDialogComponent,
 } from 'igniteui-angular';
-import { Subscription, definedDevices, definedResolutions, definedSignals, definedWindfarms } from '../subscription-management.model';
+import {
+  Subscription,
+  definedDevices,
+  definedResolutions,
+  definedSignals,
+  definedWindfarms,
+} from '../subscription-management.model';
+import { PreviewComponent } from './preview/preview.component';
 
 type FormRawValue = {
   windfarms: Array<string>;
@@ -22,22 +38,30 @@ type FormRawValue = {
   selector: 'app-add',
   standalone: true,
   imports: [
+    IGX_DIALOG_DIRECTIVES,
     IGX_INPUT_GROUP_DIRECTIVES,
     IGX_SELECT_DIRECTIVES,
     IGX_COMBO_DIRECTIVES,
     IgxDateTimeEditorModule,
     ReactiveFormsModule,
     NgForOf,
+    PreviewComponent,
   ],
   templateUrl: './add.component.html',
   styleUrl: './add.component.scss',
 })
 export class AddComponent {
+  @ViewChild('previewDialog', { read: IgxDialogComponent, static: true })
+  previewDialog!: IgxDialogComponent;
+
   @Output()
   addButtonClicked = new EventEmitter<Array<Subscription>>();
 
   @Output()
   cancelButtonClicked = new EventEmitter();
+
+  @Output()
+  cancelPreviewButtonClicked = new EventEmitter();
 
   windfarms = [...definedWindfarms];
   signals = [...definedSignals];
@@ -58,6 +82,8 @@ export class AddComponent {
     to: ['', Validators.required],
     from: ['', Validators.required],
   });
+
+  addedSubscritions: Array<Subscription> = [];
 
   constructor() {
     this.validControlWindfarms();
@@ -106,11 +132,28 @@ export class AddComponent {
     });
   }
 
+  onPreviewButtonClicked() {
+    this.cancelButtonClicked.emit();
+    this.previewDialog.open();
+  }
+
+  onPreviewCancelButtonClicked() {
+    this.previewDialog.close();
+    this.cancelPreviewButtonClicked.emit();
+  }
+
+  onPreviewAcceptButtonClicked() {
+    this.previewDialog.close();
+    this.addButtonClicked.emit(this.addedSubscritions);
+    this.form.reset();
+  }
+
   onAddButtonClicked() {
-    const addedSubscritions = this.transformSubscriptionAddedToSubscription(
+    this.addedSubscritions = this.transformSubscriptionAddedToSubscription(
       this.form.getRawValue()
     );
-    this.addButtonClicked.emit(addedSubscritions);
+    this.addButtonClicked.emit(this.addedSubscritions);
+    this.form.reset();
   }
 
   onCancelButtonClicked() {
@@ -128,8 +171,8 @@ export class AddComponent {
           devices: device,
           resolution: formRawValue.resolution,
           signals: signal,
-          from: formRawValue.from,
-          to: formRawValue.to,
+          from: dayjs(formRawValue.from).format('DD/MM/YYYY mm:ss'),
+          to: dayjs(formRawValue.from).format('DD/MM/YYYY mm:ss'),
         }))
       )
     );

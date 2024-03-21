@@ -1,1 +1,12 @@
-<p>preview works!</p>
+<igx-grid
+  class="m-3 preview-subscription__max-dialog"
+  [primaryKey]="'windfarms'"
+  [data]="subscriptions"
+>
+  <igx-column field="windfarms" header="Windfarms"></igx-column>
+  <igx-column field="devices" header="Devices"></igx-column>
+  <igx-column field="resolution" header="Resolution"></igx-column>
+  <igx-column field="signals" header="Signals"></igx-column>
+  <igx-column field="from" header="Date From"></igx-column>
+  <igx-column field="to" header="Date To"></igx-column>
+</igx-grid>
