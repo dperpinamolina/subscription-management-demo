@@ -41,7 +41,7 @@ export class FilterComponent {
     devices: [{ value: [] as Array<string>, disabled: true }],
     resolution: [{ value: '', disabled: true }],
     signals: [{ value: [] as Array<string>, disabled: true }],
-    fromTo: [{ start: new Date(2024, 2, 10), end: new Date(2024, 3, 10) }],
+    fromTo: [{ start: new Date(2024, 1, 1), end: new Date(2024, 3, 1) }],
   });
 
   constructor() {

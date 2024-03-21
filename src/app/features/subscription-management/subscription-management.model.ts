@@ -1,3 +1,5 @@
+import dayjs from "dayjs";
+
 export const definedSignals = [
   'Wind speed low start condition',
   'Yaw wind speed low yaw enable',
@@ -50,32 +52,32 @@ export const definedSubscriptions = [
   {
     windfarms: 'ES-1239809',
     signals: definedSignals[0],
-    from: '11/02/2024',
-    to: '15/02/2024',
+    from: dayjs('02-22-2024').format('DD-MM-YYYY'),
+    to: dayjs('03-22-2024').format('DD-MM-YYYY'),
     devices: 'asset1',
     resolution: 'resolution1',
   },
   {
     windfarms: 'ES-6578809',
     signals: definedSignals[1],
-    from: '11/02/2024',
-    to: '17/02/2024',
+    from: dayjs('02-01-2024').format('DD-MM-YYYY'),
+    to: dayjs('02-15-2024').format('DD-MM-YYYY'),
     devices: 'asset1',
     resolution: 'resolution1',
   },
   {
     windfarms: 'RU-1222209',
     signals: definedSignals[2],
-    from: '11/02/2024',
-    to: '29/02/2024',
+    from: dayjs('02-11-2024').format('DD-MM-YYYY'),
+    to: dayjs('02-23-2024').format('DD-MM-YYYY'),
     devices: 'asset1',
     resolution: 'resolution1',
   },
   {
     windfarms: 'EN-1111809',
     signals: definedSignals[3],
-    from: '02/02/2024',
-    to: '20/02/2024',
+    from: dayjs('02-02-2024').format('DD-MM-YYYY'),
+    to: dayjs('02-22-2024').format('DD-MM-YYYY'),
     devices: 'asset1',
     resolution: 'resolution1',
   },
