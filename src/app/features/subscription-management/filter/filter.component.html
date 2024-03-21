@@ -1,0 +1,34 @@
+<form
+  [formGroup]="filtersForm"
+  autocomplete="off"
+  (ngSubmit)="submitFilter.emit(filtersForm.getRawValue())"
+>
+  <div class="w-full m-3 flex flex-row flex-nowrap justify-between">
+    <igx-combo [data]="windfarms" formControlName="windfarms">
+      <label [for]="'windfarms'" class="comboLabel" igxLabel> Windfarms </label>
+    </igx-combo>
+    <igx-combo [data]="devices" formControlName="devices">
+      <label [for]="'devices'" class="comboLabel" igxLabel> Devices </label>
+    </igx-combo>
+    <igx-combo [data]="resolutions" formControlName="resolution">
+      <label [for]="'resolution'" class="comboLabel" igxLabel>
+        Resolution
+      </label>
+    </igx-combo>
+    <igx-combo [data]="signals" formControlName="signals">
+      <label [for]="'signals'" class="comboLabel" igxLabel> Signals </label>
+    </igx-combo>
+    <igx-date-range-picker
+      formControlName="fromTo"
+      inputFormat="dd/MM/yyyy"
+      displayFormat="dd/MM/yyyy"
+    ></igx-date-range-picker>
+    <button
+      type="submit"
+      igxButton="contained"
+      [disabled]="filtersForm.invalid"
+    >
+      Search
+    </button>
+  </div>
+</form>

@@ -35,6 +35,17 @@ export type Subscription = {
   to: string;
 };
 
+export type SubscriptionFilter = {
+  windfarms: string[];
+  devices: string[];
+  resolution: string;
+  signals: string[];
+  fromTo: {
+    start: any;
+    end: any;
+  };
+};
+
 export const definedSubscriptions = [
   {
     windfarms: 'ES-1239809',

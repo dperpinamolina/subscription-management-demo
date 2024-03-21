@@ -1,24 +1,19 @@
-import { Component, ViewChild, inject } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { Component, ViewChild } from '@angular/core';
 import dayjs from 'dayjs';
 import {
   IGX_ACTION_STRIP_DIRECTIVES,
-  IGX_COMBO_DIRECTIVES,
-  IGX_DATE_RANGE_PICKER_DIRECTIVES,
   IGX_DIALOG_DIRECTIVES,
   IGX_GRID_DIRECTIVES,
   IgxButtonDirective,
   IgxDialogComponent,
-  IgxIconComponent,
+  IgxIconComponent
 } from 'igniteui-angular';
 import { AddComponent } from './add/add.component';
+import { FilterComponent } from './filter/filter.component';
 import {
   Subscription,
-  definedDevices,
-  definedResolutions,
-  definedSignals,
-  definedSubscriptions,
-  definedWindfarms,
+  SubscriptionFilter,
+  definedSubscriptions
 } from './subscription-management.model';
 
 @Component({
@@ -29,11 +24,9 @@ import {
     IgxButtonDirective,
     IgxIconComponent,
     IGX_ACTION_STRIP_DIRECTIVES,
-    IGX_COMBO_DIRECTIVES,
     IGX_DIALOG_DIRECTIVES,
-    IGX_DATE_RANGE_PICKER_DIRECTIVES,
-    ReactiveFormsModule,
     AddComponent,
+    FilterComponent
   ],
   templateUrl: './subscription-management.component.html',
   styleUrl: './subscription-management.component.scss',
@@ -42,19 +35,7 @@ export class SubscriptionManagementComponent {
   @ViewChild('addDialog', { read: IgxDialogComponent, static: true })
   addDialog!: IgxDialogComponent;
 
-  windfarms = [...definedWindfarms];
-  signals = [...definedSignals];
-  devices = [...definedDevices];
-  resolutions = [...definedResolutions];
   readonly subscriptions: Array<Subscription> = [...definedSubscriptions];
-
-  filtersForm = inject(FormBuilder).nonNullable.group({
-    windfarms: [[]],
-    devices: [[]],
-    resolution: [[]],
-    signals: [[]],
-    fromTo: [{ start: new Date(2024, 2, 10), end: new Date(2024, 2, 25) }],
-  });
 
   filterSubscriptions = [...this.subscriptions];
 
@@ -62,41 +43,42 @@ export class SubscriptionManagementComponent {
     this.filterSubscriptions = this.subscriptions.filter((s) => s.windfarms !== windfarms);
   }
 
-  submitFilter() {
-    const { windfarms, signals, fromTo } = this.filtersForm.getRawValue();
+  submitFilter(filters: SubscriptionFilter) {
+    console.log(filters);
+    const { windfarms, signals, fromTo } = filters;
 
     const startDate = dayjs(fromTo.start);
     const endDate = dayjs(fromTo.end);
 
-    this.filterSubscriptions = this.subscriptions.filter((s) => {
-      const subscriptionStartDate = dayjs(s.from, 'DD/MM/YYYY mm:ss');
-      const subscriptionEndDate = dayjs(s.to, 'DD/MM/YYYY mm:ss');
+    // this.filterSubscriptions = this.subscriptions.filter((s) => {
+    //   const subscriptionStartDate = dayjs(s.from, 'DD/MM/YYYY mm:ss');
+    //   const subscriptionEndDate = dayjs(s.to, 'DD/MM/YYYY mm:ss');
 
-      console.log(
-        'Subscription Start Date:',
-        subscriptionStartDate.format('DD/MM/YYYY mm:ss')
-      );
-      console.log(
-        'Subscription End Date:',
-        subscriptionEndDate.format('DD/MM/YYYY mm:ss')
-      );
+    //   console.log(
+    //     'Subscription Start Date:',
+    //     subscriptionStartDate.format('DD/MM/YYYY mm:ss')
+    //   );
+    //   console.log(
+    //     'Subscription End Date:',
+    //     subscriptionEndDate.format('DD/MM/YYYY mm:ss')
+    //   );
 
-      console.log(
-        'Start Date is before Subscription End Date:',
-        startDate.isBefore(subscriptionStartDate)
-      );
-      console.log(
-        'End Date is after Subscription Start Date:',
-        endDate.isAfter(subscriptionEndDate)
-      );
+    //   console.log(
+    //     'Start Date is before Subscription End Date:',
+    //     startDate.isBefore(subscriptionStartDate)
+    //   );
+    //   console.log(
+    //     'End Date is after Subscription Start Date:',
+    //     endDate.isAfter(subscriptionEndDate)
+    //   );
 
-      return (
-        startDate.isBefore(subscriptionStartDate) &&
-        endDate.isAfter(subscriptionEndDate) &&
-        (!windfarms || s.windfarms.includes(windfarms)) &&
-        (!signals || s.signals === signals)
-      );
-    });
+    //   // return (
+    //   //   startDate.isBefore(subscriptionStartDate) &&
+    //   //   endDate.isAfter(subscriptionEndDate) &&
+    //   //   (!windfarms || s.windfarms.includes(windfarms)) &&
+    //   //   (!signals || s.signals === signals)
+    //   // );
+    // });
   }
 
   onAddSubscriptionClicked(sub: Array<Subscription>) {
