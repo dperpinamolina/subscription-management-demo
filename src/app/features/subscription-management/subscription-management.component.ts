@@ -37,53 +37,68 @@ export class SubscriptionManagementComponent {
   @ViewChild('addDialog', { read: IgxDialogComponent, static: true })
   addDialog!: IgxDialogComponent;
 
-  readonly subscriptions: Array<Subscription> = [...definedSubscriptions];
+  subscriptions: Array<Subscription> = [...definedSubscriptions];
 
   filterSubscriptions = [...this.subscriptions];
 
-  delete(windfarms: string) {
-    this.filterSubscriptions = this.subscriptions.filter(
-      (s) => s.windfarms !== windfarms
+  delete(id: number) {
+    console.log(id);
+    this.subscriptions = this.subscriptions.filter(
+      (s) => s.id !== id
     );
+    this.filterSubscriptions = [...this.subscriptions];
   }
 
   submitFilter(filters: SubscriptionFilter) {
-    const { windfarms, signals, fromTo } = filters;
+    const { windfarms, devices, resolution, signals, fromTo } = filters;
 
     const filterStartDate = dayjs(new Date(fromTo.start));
     const filterEndDate = dayjs(new Date(fromTo.end));
     this.filterSubscriptions = this.subscriptions.filter((s) => {
-      return this.datesFilter(
-        filterStartDate,
-        filterEndDate,
-        dayjs(s.from, 'DD-MM-YYYY'),
-        dayjs(s.to, 'DD-MM-YYYY')
+      return (
+        (!windfarms.length || this.windfarmsFilter(windfarms, s.windfarms)) &&
+        (!devices.length || this.devicesFilter(devices, s.signals)) &&
+        (!signals.length || this.resolutionsFilter(signals, s.signals)) &&
+        (!resolution.length || this.signalsFilter(resolution, s.windfarms)) &&
+        this.datesFilter(
+          filterStartDate,
+          filterEndDate,
+          dayjs(s.from, 'DD-MM-YYYY'),
+          dayjs(s.to, 'DD-MM-YYYY')
+        )
       );
     });
   }
 
   onAddSubscriptionClicked(sub: Array<Subscription>) {
     sub.forEach((s) =>
-      this.subscriptions.push({
-        ...s,
-        from: dayjs(s.from).format('DD/MM/YYYY mm:ss'),
-        to: dayjs(s.to).format('DD/MM/YYYY mm:ss'),
-      })
+      this.subscriptions.push(s)
     );
 
     this.filterSubscriptions = [...this.subscriptions];
     this.addDialog.close();
   }
 
-  private datesFilter(
+  private datesFilter = (
     filterStartDate: Dayjs,
     filterEndDate: Dayjs,
     subscriptionStartDate: Dayjs,
     subscriptionEndDate: Dayjs
-  ) {
-    return (
-      subscriptionStartDate.isAfter(filterStartDate) &&
-      subscriptionEndDate.isBefore(filterEndDate)
-    );
-  }
+  ): Boolean =>
+    subscriptionStartDate.isAfter(filterStartDate) &&
+    subscriptionEndDate.isBefore(filterEndDate);
+
+  private windfarmsFilter = (
+    filter: Array<string>,
+    wf: string
+  ): boolean => filter.includes(wf);
+
+  private devicesFilter = (filter: Array<string>, device: string): boolean =>
+    filter.includes(device);
+
+  private resolutionsFilter = (filter: Array<string>, res: string): boolean =>
+    filter.includes(res);
+
+  private signalsFilter = (filter: Array<string>, signal: string): boolean =>
+    filter.includes(signal);
 }

@@ -39,7 +39,7 @@ export class FilterComponent {
   filtersForm = inject(FormBuilder).nonNullable.group({
     windfarms: [[]],
     devices: [{ value: [] as Array<string>, disabled: true }],
-    resolution: [{ value: '', disabled: true }],
+    resolution: [{ value: [] as Array<string>, disabled: true }],
     signals: [{ value: [] as Array<string>, disabled: true }],
     fromTo: [{ start: new Date(2024, 1, 1), end: new Date(2024, 3, 1) }],
   });
@@ -81,8 +81,8 @@ export class FilterComponent {
   }
 
   validControlResolution() {
-    this.filtersForm.controls['resolution'].valueChanges.subscribe((v: string) => {
-      if (v) {
+    this.filtersForm.controls['resolution'].valueChanges.subscribe((v: Array<string>) => {
+      if (v.length > 0) {
         this.filtersForm.controls['signals'].enable();
       } else {
         this.filtersForm.controls['signals'].disable();

@@ -2,7 +2,7 @@
 <app-filter (submitFilter)="submitFilter($event)"></app-filter>
 <igx-grid
   class="m-3 h-96 w-full"
-  [primaryKey]="'name'"
+  [primaryKey]="'id'"
   [data]="filterSubscriptions"
 >
   <igx-column field="windfarms" header="Windfarms"></igx-column>
@@ -13,13 +13,13 @@
   <igx-column field="to" header="Date To"></igx-column>
   <igx-action-strip #actionstrip>
     <button title="View" igxIconButton="flat" igxRipple>
-      <igx-icon>view</igx-icon>
+      <igx-icon>visibility</igx-icon>
     </button>
     <button
       title="Delete"
       igxIconButton="flat"
       igxRipple
-      (click)="delete(actionstrip.context.data.windfarms)"
+      (click)="delete(actionstrip.context?.data.id)"
     >
       <igx-icon>delete</igx-icon>
     </button>

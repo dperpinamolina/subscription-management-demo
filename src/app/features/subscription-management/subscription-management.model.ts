@@ -1,4 +1,4 @@
-import dayjs from "dayjs";
+import dayjs from 'dayjs';
 
 export const definedSignals = [
   'Wind speed low start condition',
@@ -8,27 +8,30 @@ export const definedSignals = [
 ];
 
 export const definedWindfarms = [
-  'ES-123874',
-  'IT-872349',
-  'EN-123830',
-  'AU-123822',
+  'ESWC123874',
+  'ITWC872349',
+  'ENWC123830',
+  'AUWC123822',
 ];
 export const definedDevices = [
-  'device1',
-  'device2',
-  'device3',
-  'device4',
-  'device5',
+  'ESWEA87234',
+  'ESWEA32498',
+  'ENWEA23491',
+  'ITWEA12398',
+  'AUWEA12478',
 ];
 export const definedResolutions = [
-  'resolution1',
-  'resolution2',
-  'resolution3',
-  'resolution4',
-  'resolution5',
+  '10min',
+  '1min',
+  '1s',
+  '100ms',
+  '50ms',
+  '40ms',
+  '10ms',
 ];
 
 export type Subscription = {
+  id: number;
   windfarms: string;
   devices: string;
   resolution: string;
@@ -40,7 +43,7 @@ export type Subscription = {
 export type SubscriptionFilter = {
   windfarms: string[];
   devices: string[];
-  resolution: string;
+  resolution: string[];
   signals: string[];
   fromTo: {
     start: any;
@@ -50,35 +53,39 @@ export type SubscriptionFilter = {
 
 export const definedSubscriptions = [
   {
-    windfarms: 'ES-1239809',
+    id: 0,
+    windfarms: definedWindfarms[0],
     signals: definedSignals[0],
     from: dayjs('02-22-2024').format('DD-MM-YYYY'),
     to: dayjs('03-22-2024').format('DD-MM-YYYY'),
-    devices: 'asset1',
-    resolution: 'resolution1',
+    devices: definedDevices[0],
+    resolution: definedResolutions[2],
   },
   {
-    windfarms: 'ES-6578809',
+    id: 1,
+    windfarms: definedWindfarms[1],
     signals: definedSignals[1],
     from: dayjs('02-01-2024').format('DD-MM-YYYY'),
     to: dayjs('02-15-2024').format('DD-MM-YYYY'),
-    devices: 'asset1',
-    resolution: 'resolution1',
+    devices: definedDevices[0],
+    resolution: definedResolutions[0],
   },
   {
-    windfarms: 'RU-1222209',
+    id: 2,
+    windfarms: definedWindfarms[0],
     signals: definedSignals[2],
     from: dayjs('02-11-2024').format('DD-MM-YYYY'),
     to: dayjs('02-23-2024').format('DD-MM-YYYY'),
-    devices: 'asset1',
-    resolution: 'resolution1',
+    devices: definedDevices[0],
+    resolution: definedResolutions[1],
   },
   {
-    windfarms: 'EN-1111809',
+    id: 3,
+    windfarms: definedWindfarms[2],
     signals: definedSignals[3],
     from: dayjs('02-02-2024').format('DD-MM-YYYY'),
     to: dayjs('02-22-2024').format('DD-MM-YYYY'),
-    devices: 'asset1',
-    resolution: 'resolution1',
+    devices: definedDevices[3],
+    resolution: definedResolutions[0],
   },
-]
+];

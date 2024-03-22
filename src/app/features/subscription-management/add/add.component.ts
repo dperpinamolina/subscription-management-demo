@@ -2,12 +2,14 @@ import { NgForOf } from '@angular/common';
 import {
   Component,
   EventEmitter,
+  Input,
   Output,
   ViewChild,
   inject,
 } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import dayjs from 'dayjs';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
 import {
   IGX_COMBO_DIRECTIVES,
   IGX_DIALOG_DIRECTIVES,
@@ -24,6 +26,7 @@ import {
   definedWindfarms,
 } from '../subscription-management.model';
 import { PreviewComponent } from './preview/preview.component';
+dayjs.extend(customParseFormat);
 
 type FormRawValue = {
   windfarms: Array<string>;
@@ -53,6 +56,9 @@ type FormRawValue = {
 export class AddComponent {
   @ViewChild('previewDialog', { read: IgxDialogComponent, static: true })
   previewDialog!: IgxDialogComponent;
+
+  @Input()
+  nextId: number = 3;
 
   @Output()
   addButtonClicked = new EventEmitter<Array<Subscription>>();
@@ -166,14 +172,18 @@ export class AddComponent {
   ): Subscription[] =>
     formRawValue.windfarms.flatMap((windfarm) =>
       formRawValue.devices.flatMap((device) =>
-        formRawValue.signals.map((signal) => ({
-          windfarms: windfarm,
-          devices: device,
-          resolution: formRawValue.resolution,
-          signals: signal,
-          from: dayjs(formRawValue.from).format('DD/MM/YYYY mm:ss'),
-          to: dayjs(formRawValue.from).format('DD/MM/YYYY mm:ss'),
-        }))
+        formRawValue.signals.map((signal) => {
+          this.nextId = this.nextId + 1;
+          return {
+            id: this.nextId,
+            windfarms: windfarm,
+            devices: device,
+            resolution: formRawValue.resolution,
+            signals: signal,
+            from: dayjs(formRawValue.from).format('DD-MM-YYYY mm:ss'),
+            to: dayjs(formRawValue.to).format('DD-MM-YYYY mm:ss'),
+          };
+        })
       )
     );
 }
